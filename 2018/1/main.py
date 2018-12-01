@@ -15,7 +15,14 @@ def readInput( file, type ):
 
 
 if __name__ == "__main__":
-    num_list = readinput("input_one.txt", "scalar_list")
+    num_list = readInput("input_one.txt", "scalar_list")
+
+    freq = 0
+    for change in num_list:
+        freq += change
+
+    print(freq)
+        
     
 
 
