@@ -1,23 +1,11 @@
 
-
-def readInput( file, type ):
-    
-    input_file = open(file, "r")
-
-    # row delimitered list of scalars
-    if ( type == "scalar_list" ):
-        output = []
-        for row in input_file:
-            output.append(int(row))
-
-    # Return Output
-    return output
+from util import *
 
 
 if __name__ == "__main__":
     
     # Read input
-    num_list = readInput("input_one.txt", "scalar_list")
+    num_list = readInput("1.txt", "scalar_list")
 
     # Part one, find end frequency
     freq = 0
@@ -37,7 +25,7 @@ if __name__ == "__main__":
         freq += num_list[idx]
 
         # Print length for debugging
-        print(len(freq_list))
+        print("Unique frequencies detected: " + str(len(freq_list)), end='\r')
             
         # Circular list 
         idx += 1
