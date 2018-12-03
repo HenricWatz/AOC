@@ -52,7 +52,7 @@ if __name__ == "__main__":
 		for elem in row:
 			remaining_id.add(elem)
 		
-	print("Id of none overlapping pattern: " + str(safe_ids))
+	print("Id of none overlapping pattern (part 2): " + str(list(safe_ids)[0]))
 	
 	
 	

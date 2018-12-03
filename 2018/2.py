@@ -1,5 +1,16 @@
 
-from util import *
+def readInput( file, type ):
+	
+	input_file = open(file, "r")
+			
+	# row delimitered list of strings
+	if ( type == "text_list" ):
+		output = []
+		for row in input_file :
+			output.append(str(row))
+
+    # Return Output
+	return output
 
 
 if __name__ == "__main__":
@@ -21,10 +32,6 @@ if __name__ == "__main__":
 			
 			if amount > 1 :
 				total_amount_list[amount] += 1
-				
-	
-	# Print duplicates
-	print(total_amount_list)
 	
 	# Calc checksum
 	checksum = 1
@@ -48,7 +55,7 @@ if __name__ == "__main__":
 					matches += 1
 					
 			if matches == (string_lenth-1):
-				print ("idx: " + str(string_idx) + " and idx: " + str(compare_idx) + " match")
+				#print ("idx " + str(string_idx) + " and idx " + str(compare_idx) + " match")
 				
 				# build prototype
 				prototype = ""
@@ -56,7 +63,7 @@ if __name__ == "__main__":
 					if string_list[string_idx][char_idx] == string_list[compare_idx][char_idx]:
 						prototype += string_list[string_idx][char_idx]
 						
-				print ("Prototype: " + prototype)
+				print ("Prototype (part 2): " + prototype)
 				
 			
 				
