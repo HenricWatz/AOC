@@ -7,6 +7,7 @@ def readInput( file, type ):
 	if ( type == "scalar_list" ):
 		output = []
 		for row in input_file:
+			output.append(int(row))
 			
     # Return Output
 	return output
