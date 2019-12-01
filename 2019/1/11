@@ -1,0 +1,31 @@
+
+from math import *
+
+def fuel(mass):
+	if (floor(mass/3)-2) > 0:
+		return (floor(mass/3)-2)
+	else:
+		return 0
+
+print("Example 1: " + str(fuel(12)))
+print("Example 2: " + str(fuel(14)))
+print("Example 3: " + str(fuel(1969)))
+print("Example 4: " + str(fuel(100756)))
+
+with open('../1.txt', 'r') as fp:
+	line = fp.readline()
+	tot_fuel = 0
+	while line:
+		module_fuel = fuel(int(line))
+		fuel_fuel = fuel(int(module_fuel))
+		
+		new_fuel = fuel_fuel
+		while fuel(new_fuel) > 0:
+			new_fuel = fuel(new_fuel)
+			fuel_fuel += new_fuel
+			
+			
+		tot_fuel += (module_fuel + fuel_fuel)
+		line = fp.readline()
+
+	print("Total fuel: " + str(tot_fuel))
