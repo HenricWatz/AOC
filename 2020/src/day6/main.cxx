@@ -15,49 +15,6 @@ int parse_input(char* filename);
 int parseSeatId(char* row);
 int findEmptySeat(void);
 
-/* Calc seat id from char row */
-int parseSeatId(char* row)
-{
-    int seat_row = 0;
-    float row_segment = 128;
-    float col_segment = 8;
-    int seat_col = 0;
-    int seat_ID;
-
-    while (*row != '\n')
-    {
-        /* Row */
-        if (*row == 'B')
-        {
-            row_segment = row_segment / 2;
-            seat_row += row_segment;
-        }
-             
-        if (*row == 'F')
-            row_segment = row_segment / 2;
-
-        /* Colummn */
-        if (*row == 'R')
-        {
-            col_segment = col_segment / 2;
-            seat_col += col_segment;
-        }
-
-        if (*row == 'L')
-        {
-            col_segment = col_segment / 2;
-        }
-            
-        /* Next str char */
-        row += 1;
-    }
-
-    seat_ID = (seat_row * 8 + seat_col);
-    printf("Row: %d, Col: %d, ID: %d\n", seat_row, seat_col, seat_ID);
-
-    return seat_ID;
-}
-
 /* Parse file */
 int parse_input(char* filename)
 {
@@ -71,55 +28,147 @@ int parse_input(char* filename)
     }
 
     /* Parse row by row */
-    int seat_id = 0;
-    int max_seat_id = 0;
+    bool questionYes[26] = { false };
+    int numOfYes;
+    int total = 0;
+    char* row_p;
     while (fgets(str, MAXCHAR, fp) != NULL)
     {
-        seat_id = parseSeatId(str);
-        
-        seatInList[seat_id] = true;
-        if (seat_id > max_seat_id)
+        // Treat array as pointer
+        row_p = str;
+
+        // first char is newline -> new group
+        if ((*row_p) == '\n')
         {
-            max_seat_id = seat_id;
+            // Count Yes and clear array
+            numOfYes = 0;
+            for (char question = 'a'; question <= 'z'; question++)
+            {
+                if (questionYes[(question - 'a')])
+                {
+                    numOfYes += 1;
+                    questionYes[(question - 'a')] = false;
+                }
+            }
+
+            // Add groups answers to total
+            total += numOfYes;
         }
+        else
+        {
+            while ((*row_p) != '\n')
+            {
+                for (char question = 'a'; question <= 'z'; question++)
+                {
+                    if ((*row_p) == question)
+                    {
+                        questionYes[(question - 'a')] = true;
+                    }
+                }
+
+                // Next char
+                row_p += 1;
+            }
+        }
+    
         printf("%s", str);
     }
      
-    printf("Max ID: %d", max_seat_id);
+    printf("sum of those counts: %d", total);
     fclose(fp);
 
     return 0;
 }
 
-int findEmptySeat(void)
+/* Parse file part 2*/
+int parse_input2(char* filename)
 {
-    int idx = 0;
+    FILE* fp;
+    char str[MAXCHAR];
 
-    /* Find first ocupide seat */
-    while (seatInList[idx] == false)
-    {
-        idx += 1;
+    fp = fopen(filename, "r");
+    if (fp == NULL) {
+        printf("Could not open file %s", filename);
+        return 1;
     }
 
-    /* Find next empty seat */
-    while (seatInList[idx] == true)
+    /* Parse row by row */
+    int questionYes[26] = { 0 };
+    int numInGroup = 0;
+    int numOfYes;
+    int total = 0;
+    char* row_p;
+    while (fgets(str, MAXCHAR, fp) != NULL)
     {
-        idx += 1;
-     }
+        // Treat array as pointer
+        row_p = str;
 
-    return idx;
+        // first char is newline -> new group
+        if ((*row_p) == '\n')
+        {
+            // Count Yes and clear array
+            numOfYes = 0;
+            for (char question = 'a'; question <= 'z'; question++)
+            {
+                if (questionYes[(question - 'a')] == numInGroup)
+                {
+                    numOfYes += 1;
+                }
+
+                questionYes[(question - 'a')] = 0;
+            }
+
+            // Reset group counter
+            numInGroup = 0;
+
+            // Add groups answers to total
+            total += numOfYes;
+        }
+        else
+        {
+            while ((*row_p) != '\n')
+            {
+                for (char question = 'a'; question <= 'z'; question++)
+                {
+                    if ((*row_p) == question)
+                    {
+                        questionYes[(question - 'a')] += 1;
+                    }
+                }
+
+                // Next char
+                row_p += 1;
+            }
+
+            // Every person in a group ends in newline
+            numInGroup += 1;
+        }
+
+        printf("%s", str);
+    }
+
+    printf("sum of those counts: %d", total);
+    fclose(fp);
+
+    return 0;
 }
+
+
 
 /* Main */
 int main (int argc, char *argv[])
 {
 
     // example
-    parse_input(R"(C:\Users\watz\Documents\GitHub\AOC\2020\src\day5\example_1.txt)");
-    
-    // input
-    parse_input(R"(C:\Users\watz\Documents\GitHub\AOC\2020\src\day5\input_1.txt)");
-    printf("My seat: %d", findEmptySeat());
+    parse_input(R"(C:\Users\Watz\Desktop\AOC\2020\src\day6\example_1.txt)");
 
+    // input
+    parse_input(R"(C:\Users\Watz\Desktop\AOC\2020\src\day6\input_1.txt)");
+
+    // example
+    parse_input2(R"(C:\Users\Watz\Desktop\AOC\2020\src\day6\example_1.txt)");
+
+    // input
+    parse_input2(R"(C:\Users\Watz\Desktop\AOC\2020\src\day6\input_1.txt)");
 }
 
