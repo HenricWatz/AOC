@@ -11,7 +11,7 @@
 int parse_input(char* filename);
 void sort_array(int* array, int length);
 void count_diff(int* array, int length);
-int count_permutations(int* array, int length);
+long long int count_permutations(int* array, int length);
 int fact(int input);
 
 /* Parse file */
@@ -63,9 +63,9 @@ int parse_input(char* filename)
 
     count_diff(adapterList, numOfAdapters);
 
-    int numOfRedundant;
+    long long int numOfRedundant;
     numOfRedundant = count_permutations(adapterList, numOfAdapters);
-    printf("Permutations: %d\n", numOfRedundant);
+    printf("Permutations: %lld\n", numOfRedundant);
 
     return 0;
 }
@@ -122,10 +122,16 @@ void count_diff(int* array, int length)
     printf("1 jolts * 3 jolts = %d * %d = %d\n", diff[1], diff[3], diff[1] * diff[3]);
 }
 
-int count_permutations(int* array, int length)
+long long int count_permutations(int* array, int length)
 {
     int numOfOnes = 0;
-    int numOfPermutations = 1; // no plugs removed
+    long long int numOfPermutations = 1; // no plugs removed
+
+    // may be able to remove first plug
+    if (array[0] == 1)
+    {
+        numOfOnes += 1;
+    }
 
     for (int i = 0; i < length-1; i++)
     {
@@ -137,21 +143,42 @@ int count_permutations(int* array, int length)
         {
             if (numOfOnes == 2)
             {
+                printf("2 : ");
                 numOfPermutations *= 2;
             }
 
             if (numOfOnes == 3)
             {
+                printf("3 : ");
                 numOfPermutations *= 4;
             }
 
             if (numOfOnes == 4)
             {
+                printf("4 : ");
                 numOfPermutations *= 7;
             }
 
             numOfOnes = 0;
         }
+    }
+
+    if (numOfOnes == 2)
+    {
+        printf("2 : ");
+        numOfPermutations *= 2;
+    }
+
+    if (numOfOnes == 3)
+    {
+        printf("3 : ");
+        numOfPermutations *= 4;
+    }
+
+    if (numOfOnes == 4)
+    {
+        printf("4 : ");
+        numOfPermutations *= 7;
     }
 
     return numOfPermutations;
@@ -173,17 +200,16 @@ int fact(int input)
 /* Main */
 int main(int argc, char* argv[])
 {
-    printf("fact 1: %d\n", fact(1));
-    printf("fact 2: %d\n", fact(2));
-    printf("fact 3: %d\n", fact(3));
-    printf("fact 4: %d\n", fact(4));
-
     // example
-    parse_input(R"(C:\Users\Watz\Desktop\AOC\2020\src\day10\example_1.txt)");
-    parse_input(R"(C:\Users\Watz\Desktop\AOC\2020\src\day10\example_2.txt)");
+    //parse_input(R"(C:\Users\Watz\Desktop\AOC\2020\src\day10\example_1.txt)");
+    //parse_input(R"(C:\Users\Watz\Desktop\AOC\2020\src\day10\example_2.txt)");
 
     // input 1
     //parse_input(R"(C:\Users\Watz\Desktop\AOC\2020\src\day10\input_1.txt)");
 
+    // zenbook path
+    parse_input(R"(C:\Users\watz\Documents\GitHub\AOC\2020\src\day10\example_1.txt)");
+    parse_input(R"(C:\Users\watz\Documents\GitHub\AOC\2020\src\day10\example_2.txt)");
+    parse_input(R"(C:\Users\watz\Documents\GitHub\AOC\2020\src\day10\input_1.txt)");
 }
 
